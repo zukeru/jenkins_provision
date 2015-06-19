@@ -62,12 +62,12 @@ cloud_revision = args.cloud_revision
 role = args.role
 
 #asg arguments
-min_size = args.autoscale_group
-max_size = args.autoscale_group
-desired_size = args.autoscale_group
-azs = args.autoscale_group
-asg_name = args.autoscale_group
-force_delete = args.autoscale_group
+min_size = args.min_size
+max_size = args.max_size
+desired_size = args.desired_size
+azs = args.azs
+asg_name = args.asg_name
+force_delete = args.force_delete
 tags = args.tags
 hc_type = args.hc_type
 hc_period = args.hc_period
