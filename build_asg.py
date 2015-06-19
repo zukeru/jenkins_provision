@@ -48,8 +48,7 @@ secret_key = args.secret_key
 access_key = args.access_key
 provider_region = args.provider_region
 security_groups = args.security_groups
-autoscale_group = args.autoscale_group #boolean for deploying autoscale group
-launch_configuration = args.launch_config #boolean for launch config
+
 
 cloud_stack = args.cloud_stack 
 cloud_environment = args.cloud_environment
@@ -61,6 +60,7 @@ cloud_launch_config = args.cloud_launch_config
 cloud_dev_phase = args.cloud_dev_phase
 cloud_revision = args.cloud_revision
 role = args.role
+
 #asg arguments
 min_size = args.autoscale_group
 max_size = args.autoscale_group
