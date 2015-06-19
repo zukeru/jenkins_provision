@@ -6,6 +6,7 @@ import random
 import multiprocessing
 import time
 import collections
+import os
 
 parser = argparse.ArgumentParser()    
 parser.add_argument('--secret_key', help='', required=False)
@@ -44,8 +45,8 @@ parser.add_argument('--role', help='', required=False)
 parser.add_argument('--security_groups', help='', required=False)
 
 args = parser.parse_args()
-secret_key = args.secret_key
-access_key = args.access_key
+secret_key = os.environ.get('AWS_SECRET_KEY')
+access_key = os.environ.get('AWS_ACCESS_KEY')
 provider_region = args.provider_region
 security_groups = args.security_groups
 
