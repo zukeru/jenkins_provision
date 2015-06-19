@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-python build_asg.py
+python build_asg.py \ 
 --secret_key $job_secret_key \
 --access_key $job_access_key \
 --provider-region $provider-region \
