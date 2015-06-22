@@ -259,13 +259,10 @@ security_group_name = security_groups[1]
 security_groups = security_groups[0]
 lc_security_groups = security_group_name
 
-
-    
 if tags:
-    tags = tags + 'ClusterName:%s:true' % asg_name
     built_tags = build_tags(tags)
 else:
-    built_tags = 'ClusterName:%s:true' % asg_name
+    built_tags = ''
     
 user_data_ins = [('export CLOUD_ENVIRONMENT=%s\n' % cloud_environment),
                  ('export CLOUD_MONITOR_BUCKET=%s\n' % cluster_monitor_bucket),
