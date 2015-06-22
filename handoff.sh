@@ -7,7 +7,6 @@ sudo wget https://dl.bintray.com/mitchellh/terraform/terraform_0.5.3_linux_amd64
 sudo unzip terraform_0.5.3_linux_amd64.zip
 sudo mkdir $WORKSPACE/configs
 sudo cp $WORKSPACE/Output.tf $WORKSPACE/terraform/configs/Output.tf
-sudo cp $WORKSPACE/user-data.txt $WORKSPACE/terraform/configs/user-data.txt 
 cat $WORKSPACE/terraform/configs/Output.tf
-cat $WORKSPACE/terraform/configs/user-data.txt
+cat $WORKSPACE/user-data.txt
 $WORKSPACE/terraform/terraform apply $WORKSPACE/terraform/configs
