@@ -142,19 +142,21 @@ def build_tags(tags):
     return built_tags
 
 def build_block_devices(block_devices):
+    
     built_devices = ''
     block_devices = block_devices.split(',')
     for device in block_devices:
-        values = device.split(':')
-        built_devices = built_devices + '''
-            ebs_block_device{
-                device_name = "%s"
-                volume_type = "%s"
-                volume_size = %s
-                delete_on_termination = %s
-                iops = %s
-            }
-        ''' % (values[0].split('=')[1],values[1].split('=')[1],values[2].split('=')[1],values[3].split('=')[1],values[4].split('=')[1])
+        if len(device) > 6:
+            values = device.split(':')
+            built_devices = built_devices + '''
+                ebs_block_device{
+                    device_name = "%s"
+                    volume_type = "%s"
+                    volume_size = %s
+                    delete_on_termination = %s
+                    iops = %s
+                }
+            ''' % (values[0].split('=')[1],values[1].split('=')[1],values[2].split('=')[1],values[3].split('=')[1],values[4].split('=')[1])
     return built_devices
 
 def build_az_list(azs):
@@ -231,6 +233,7 @@ def build_asg(**kwargs):
 def build_security_group(security_groups, cluster_name):
     security_group = ''
     for group in security_groups.split(','):
+        if len(group) > 6:
             if 'name' in str(group):
                 name = group.split(':')[0].split('=')[1]
                 name2 = group.split(':')[0].split('=')[1]
