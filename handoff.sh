@@ -11,4 +11,4 @@ sudo cp $WORKSPACE/Output.tf $WORKSPACE/terraform/configs/Output.tf
 sudo cp $WORKSPACE/user-data.txt $WORKSPACE/terraform/configs/user-data.txt 
 cat $WORKSPACE/terraform/configs/Output.tf
 cat $WORKSPACE/terraform/configs/user-data.txt
-$WORKSPACE/terraform apply
+$WORKSPACE/terraform/terraform apply
