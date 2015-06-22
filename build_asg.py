@@ -254,6 +254,7 @@ def build_security_group(security_groups, cluster_name):
 
 asg_name = asg_name + '_' + lc_image_id + '_' + role
 cluster_name = asg_name
+print security_groups
 security_groups = build_security_group(security_groups, cluster_name)
 print security_groups
 security_group_name = security_groups[1]
@@ -261,6 +262,7 @@ security_groups = security_groups[0]
 lc_security_groups = security_group_name
 az_list = build_az_list(azs)
 block_device_mapping = build_block_devices(block_device_mapping)
+print block_device_mapping
 
 if tags:
     built_tags = build_tags(tags)
