@@ -10,6 +10,7 @@ import os
 
 parser = argparse.ArgumentParser()    
 parser.add_argument('--secret_key', help='', required=False)
+parser.add_argument('--wd', help='', required=False)
 parser.add_argument('--access_key', help='', required=False)
 parser.add_argument('--provider-region', help='', required=False)
 parser.add_argument('--autoscale_group', help='', required=False)
@@ -85,7 +86,7 @@ in_user_data = args.in_user_data
 lc_public_ip = args.lc_public_ip
 block_devices = args.block_devices
 security_group_name = []
-
+wd = args.wd
 
 def build_lc(lc_name, lc_name2, lc_image_id, lc_instance_type, lc_public_ip, lc_security_groups, lc_iam_instance_profile, lc_user_data, lc_key_name,block_device_mapping):
     launch_config_dict = collections.OrderedDict()
@@ -291,7 +292,7 @@ for line in user_data_ins:
     text_file.write(line)
     
 text_file.close()
-lc_user_data = '${file("user-data.txt")}'
+lc_user_data = '${file("%s/user-data.txt")}' %wd
 
 launch_config_variable = "${aws_launch_configuration.%s.id}" % lc_name
 
