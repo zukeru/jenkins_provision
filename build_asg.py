@@ -295,7 +295,7 @@ for line in user_data_ins:
     text_file.write(line)
     
 text_file.close()
-lc_user_data = '${file("%s/terraform/configs/user-data.txt")}' %wd
+lc_user_data = '${file("%s/user-data.txt")}' %wd
 
 launch_config_variable = "${aws_launch_configuration.%s.id}" % lc_name
 
