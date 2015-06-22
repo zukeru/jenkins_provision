@@ -83,7 +83,7 @@ lc_iam_instance_profile = args.lc_iam_instance_profile
 lc_key_name = args.lc_key_name
 in_user_data = args.in_user_data
 lc_public_ip = args.lc_public_ip
-block_device_mapping = args.block_devices
+block_devices = args.block_devices
 security_group_name = []
 
 
@@ -254,15 +254,13 @@ def build_security_group(security_groups, cluster_name):
 
 asg_name = asg_name + '_' + lc_image_id + '_' + role
 cluster_name = asg_name
-print security_groups
 security_groups = build_security_group(security_groups, cluster_name)
-print security_groups
 security_group_name = security_groups[1]
 security_groups = security_groups[0]
 lc_security_groups = security_group_name
 az_list = build_az_list(azs)
-block_device_mapping = build_block_devices(block_device_mapping)
-print block_device_mapping
+block_device_mapping = build_block_devices(block_devices)
+
 
 if tags:
     built_tags = build_tags(tags)
