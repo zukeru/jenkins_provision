@@ -272,6 +272,7 @@ security_group_name = security_groups[1]
 security_groups = security_groups[0]
 lc_security_groups = security_group_name
 az_list = build_az_list(azs)
+block_devices = block_devices.replace(' ', '')
 block_device_mapping = build_block_devices(block_devices)
 
 constant_tag = 'ClusterName:%s:true ' % cluster_name
@@ -280,6 +281,7 @@ if tags:
     built_tags = build_tags(tags)
 else:
     built_tags = constant_tag
+build_tags = built_tags.replace(' ','')
     
 user_data_ins = [('export CLOUD_ENVIRONMENT=%s\n' % cloud_environment),
                  ('export CLOUD_MONITOR_BUCKET=%s\n' % cluster_monitor_bucket),
