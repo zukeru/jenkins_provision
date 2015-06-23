@@ -7,6 +7,8 @@ import multiprocessing
 import time
 import collections
 import os
+import uuid
+import base64
 
 parser = argparse.ArgumentParser()    
 parser.add_argument('--secret_key', help='', required=False)
@@ -257,9 +259,12 @@ def build_security_group(security_groups, cluster_name):
     return_list = (security_group,security_group_name)    
     return return_list  
 
+def get_a_uuid():
+    r_uuid = base64.urlsafe_b64encode(uuid.uuid4().bytes)
+    return r_uuid.replace('=', '')
 
-
-asg_name = asg_name + '_' + lc_image_id + '_' + role
+uuid = get_a_uuid()
+asg_name = asg_name + str(uuid)
 cluster_name = asg_name
 security_groups = build_security_group(security_groups, cluster_name)
 security_group_name = security_groups[1]
