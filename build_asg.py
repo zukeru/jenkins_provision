@@ -298,9 +298,9 @@ for line in user_data_ins:
 text_file.close()
 lc_user_data = '${file("%s/user-data.txt")}' %wd
 
-launch_config_variable = "${aws_launch_configuration.%s.id}" % lc_name
+launch_config_variable = "${aws_launch_configuration.%s.id}" % cluster_name
 
-launch_configuration = build_lc(lc_name,lc_name, lc_image_id, lc_instance_type, lc_public_ip, lc_security_groups, lc_iam_instance_profile, lc_user_data, lc_key_name,block_device_mapping)
+launch_configuration = build_lc(cluster_name,cluster_name, lc_image_id, lc_instance_type, lc_public_ip, lc_security_groups, lc_iam_instance_profile, lc_user_data, lc_key_name,block_device_mapping)
 
 autoscale_group = build_asg(built_tags = built_tags if built_tags else None,
                               asgname = asg_name, 
