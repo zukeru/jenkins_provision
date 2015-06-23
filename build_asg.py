@@ -281,7 +281,7 @@ if tags:
     built_tags = build_tags(tags)
 else:
     built_tags = constant_tag
-build_tags = built_tags.replace(' ','')
+built_tags = built_tags.replace(' ','')
     
 user_data_ins = [('export CLOUD_ENVIRONMENT=%s\n' % cloud_environment),
                  ('export CLOUD_MONITOR_BUCKET=%s\n' % cluster_monitor_bucket),
