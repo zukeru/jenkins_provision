@@ -268,7 +268,7 @@ lc_security_groups = security_group_name
 az_list = build_az_list(azs)
 block_device_mapping = build_block_devices(block_devices)
 
-constant_tag = 'ClusterName:%s:true ' % + cluster_name
+constant_tag = 'ClusterName:%s:true ' % cluster_name
 
 if tags:
     built_tags = build_tags(tags)
