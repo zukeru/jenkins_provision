@@ -268,11 +268,12 @@ lc_security_groups = security_group_name
 az_list = build_az_list(azs)
 block_device_mapping = build_block_devices(block_devices)
 
+constant_tag = 'ClusterName:%s:true ' % + asg_name + '_' + lc_image_id + '_' + role
 
 if tags:
     built_tags = build_tags(tags)
 else:
-    built_tags = ''
+    built_tags = constant_tag
     
 user_data_ins = [('export CLOUD_ENVIRONMENT=%s\n' % cloud_environment),
                  ('export CLOUD_MONITOR_BUCKET=%s\n' % cluster_monitor_bucket),
