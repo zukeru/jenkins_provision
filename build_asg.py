@@ -266,6 +266,7 @@ def get_a_uuid():
 uuid = str(get_a_uuid())
 asg_name = asg_name + uuid[:8]
 cluster_name = asg_name
+security_groups = security_groups.replace(' ', '')
 security_groups = build_security_group(security_groups, cluster_name, sg_tag)
 security_group_name = security_groups[1]
 security_groups = security_groups[0]
