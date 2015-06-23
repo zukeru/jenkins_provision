@@ -204,9 +204,9 @@ def build_asg(**kwargs):
     else:
         order_dict['max_size'] = 1
     if kwargs['min_size']:
-        order_dict['min_size'] = 1
-    else:
         order_dict['min_size'] = kwargs['min_size']
+    else:
+        order_dict['min_size'] = 1
     if kwargs['launch_configuration']:
         order_dict['launch_configuration'] = kwargs['launch_configuration']
     if kwargs['health_check_grace_period']:
