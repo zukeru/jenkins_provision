@@ -46,11 +46,11 @@ parser.add_argument('--cloud_dev_phase', help='', required=False)
 parser.add_argument('--cloud_revision', help='', required=False)
 parser.add_argument('--role', help='', required=False)
 parser.add_argument('--security_groups', help='', required=False)
-
+parser.add_argument('--sg_tag', help='', required=False)
 args = parser.parse_args()
 #secret_key = os.environ.get('AWS_SECRET_KEY')
 #access_key = os.environ.get('AWS_ACCESS_KEY')
-
+sg_tag = args.sg_tag
 secret_key = args.secret_key
 access_key = args.access_key
 provider_region = args.provider_region
@@ -192,13 +192,13 @@ def build_rules(rules):
                                rule.split('=')[1].split(';')[3].split('|')[1])
     return build_string
 
-def build_security_group(security_groups, cluster_name):
+def build_security_group(security_groups, cluster_name, sg_tag):
     security_group = ''
     for group in security_groups.split(','):
         if len(group) > 6:
             if 'name' in str(group):
-                name = cluster_name
-                name2 = cluster_name
+                name = sg_tag + cluster_name
+                name2 = sg_tag + cluster_name
                 security_group_name.append("${aws_security_group.%s.id}" % name)
                 description = group.split(':')[1].split('=')[1]
                 rules = group.split('!')[1]
@@ -266,7 +266,7 @@ def get_a_uuid():
 uuid = str(get_a_uuid())
 asg_name = asg_name + uuid[:8]
 cluster_name = asg_name
-security_groups = build_security_group(security_groups, cluster_name)
+security_groups = build_security_group(security_groups, cluster_name, sg_tag)
 security_group_name = security_groups[1]
 security_groups = security_groups[0]
 lc_security_groups = security_group_name
