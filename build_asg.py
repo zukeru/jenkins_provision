@@ -172,9 +172,10 @@ def build_az_list(azs):
         az_list.append('%s' % az)
     return az_list
 
-def build_rules(name,rules):
+def build_rules(rules):
     build_string = ''
     for rule in rules.split(':'):
+        name = rule.split('=')[0]
         if len(rule) > 10:
             build_string = build_string + '''
                     %s {
@@ -190,6 +191,28 @@ def build_rules(name,rules):
                                rule.split('=')[1].split(';')[3].split('|')[0],
                                rule.split('=')[1].split(';')[3].split('|')[1])
     return build_string
+
+def build_security_group(security_groups, cluster_name):
+    security_group = ''
+    for group in security_groups.split(','):
+        if len(group) > 6:
+            if 'name' in str(group):
+                name = cluster_name
+                name2 = cluster_name
+                security_group_name.append("${aws_security_group.%s.id}" % name)
+                description = group.split(':')[1].split('=')[1]
+                rules = group.split('!')[1]
+                rules = build_rules(rules)
+                security_group = security_group + '''
+                resource "aws_security_group" "%s" {
+                    name = "%s"
+                    description = "%s"
+                    %s
+                }''' % (name, name2, description, rules)   
+            else:
+                break   
+    return_list = (security_group,security_group_name)    
+    return return_list 
 
 #Dynamically builds ASG, and won't include values  if they dont exist. Need to do errors when its required.
 def build_asg(**kwargs):
@@ -235,30 +258,7 @@ def build_asg(**kwargs):
                 asg_string = asg_string + '        %s\n' % (value)
     asg_string = asg_string + '\n    }'
     return asg_string
-                        
-def build_security_group(security_groups, cluster_name):
-    security_group = ''
-    for group in security_groups.split(','):
-        if len(group) > 6:
-            if 'name' in str(group):
-                name = cluster_name
-                name2 = cluster_name
-                security_group_name.append("${aws_security_group.%s.id}" % name)
-                description = group.split(':')[1].split('=')[1]
-                rules = group.split('!')[1]
-                rule_name = group.split(':')[2].split('=')[0].replace('!','')
-                rules = build_rules(rule_name, rules)
-                security_group = security_group + '''
-                resource "aws_security_group" "%s" {
-                    name = "%s"
-                    description = "%s"
-                    %s
-                }''' % (name, name2, description, rules)   
-            else:
-                break   
-    return_list = (security_group,security_group_name)    
-    return return_list  
-
+                         
 def get_a_uuid():
     r_uuid = base64.urlsafe_b64encode(uuid.uuid4().bytes)
     return r_uuid.replace('=', '')
