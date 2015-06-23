@@ -263,8 +263,8 @@ def get_a_uuid():
     r_uuid = base64.urlsafe_b64encode(uuid.uuid4().bytes)
     return r_uuid.replace('=', '')
 
-uuid = get_a_uuid()
-asg_name = asg_name + str(uuid)
+uuid = str(get_a_uuid())
+asg_name = asg_name + uuid[:8]
 cluster_name = asg_name
 security_groups = build_security_group(security_groups, cluster_name)
 security_group_name = security_groups[1]
