@@ -239,8 +239,8 @@ def build_security_group(security_groups, cluster_name):
     for group in security_groups.split(','):
         if len(group) > 6:
             if 'name' in str(group):
-                name = group.split(':')[0].split('=')[1]
-                name2 = group.split(':')[0].split('=')[1]
+                name = cluster_name
+                name2 = cluster_name
                 security_group_name.append("${aws_security_group.%s.id}" % name)
                 description = group.split(':')[1].split('=')[1]
                 rules = group.split('!')[1]
@@ -268,7 +268,7 @@ lc_security_groups = security_group_name
 az_list = build_az_list(azs)
 block_device_mapping = build_block_devices(block_devices)
 
-constant_tag = 'ClusterName:%s:true ' % + asg_name + '_' + lc_image_id + '_' + role
+constant_tag = 'ClusterName:%s:true ' % + cluster_name
 
 if tags:
     built_tags = build_tags(tags)
