@@ -193,6 +193,7 @@ def build_rules(rules):
 
 def build_security_group(security_groups, cluster_name, sg_tag):
     security_group = ''
+    flag = False
     for group in security_groups.split(','):
         if len(group) > 6:
             if 'name' in str(group):
@@ -206,10 +207,12 @@ def build_security_group(security_groups, cluster_name, sg_tag):
                     if check_name in item_ret:
                         name = item_ret.replace('SecurityGroup:', '')
                         name2 = item_ret.replace('SecurityGroup:', '')
+                        security_group_name.append(str(item.id))
+                        flag = True
                     else:
                         name = cluster_name
                         name2 = cluster_name
-                security_group_name.append("${aws_security_group.%s.id}" % name)
+                        security_group_name.append("${aws_security_group.%s.id}" % name)
                 description = group.split(':')[1].split('=')[1]
                 rules = group.split('!')[1]
                 rules = build_rules(rules)
@@ -221,7 +224,7 @@ def build_security_group(security_groups, cluster_name, sg_tag):
                 }''' % (name, name2, description, rules)   
             else:
                 break   
-    return_list = (security_group,security_group_name)    
+    return_list = (security_group,security_group_name, flag)    
     return return_list 
 
 #Dynamically builds ASG, and won't include values  if they dont exist. Need to do errors when its required.
@@ -280,7 +283,14 @@ security_groups = security_groups.replace(' ', '')
 security_groups = build_security_group(security_groups, cluster_name, sg_tag)
 security_group_name = security_groups[1]
 security_groups = security_groups[0]
-lc_security_groups = security_group_name
+security_flag = security_groups[2]
+
+if security_flag:
+    lc_security_groups = security_group_name[0]
+    lc_security_groups = '["%s",' % lc_security_groups
+else:
+    lc_security_groups = security_group_name
+    
 az_list = build_az_list(azs)
 block_devices = block_devices.replace(' ', '')
 block_device_mapping = build_block_devices(block_devices)
@@ -344,7 +354,8 @@ provider = """
 
 text_file = open("Output.tf", "wa")
 text_file.write(provider)
-text_file.write(security_groups)
+if not security_flag:
+    text_file.write(security_groups)
 text_file.write(launch_configuration)
 text_file.write(autoscale_group)
 text_file.close()
