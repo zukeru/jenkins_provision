@@ -4,5 +4,6 @@ sudo python $WORKSPACE/build_asg.py --sg_tag $sg_tag --env $env_name --secret_ke
 sudo wget https://dl.bintray.com/mitchellh/terraform/terraform_0.5.3_linux_amd64.zip
 sudo unzip terraform_0.5.3_linux_amd64.zip
 sudo cat $WORKSPACE/Output.tf
+sudo cat $WORKSPACE/user-data.txt
 sudo $WORKSPACE/terraform apply $WORKSPACE
 sudo rm -rf $WORKSPACE/*
