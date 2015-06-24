@@ -213,6 +213,7 @@ def build_security_group(security_groups, cluster_name, sg_tag):
                         name = cluster_name
                         name2 = cluster_name
                         security_group_name.append("${aws_security_group.%s.id}" % name)
+                        
                 description = group.split(':')[1].split('=')[1]
                 rules = group.split('!')[1]
                 rules = build_rules(rules)
@@ -354,7 +355,9 @@ provider = """
 
 text_file = open("Output.tf", "wa")
 text_file.write(provider)
-if not security_flag:
+if security_flag:
+    print 'nada'
+else:
     text_file.write(security_groups)
 text_file.write(launch_configuration)
 text_file.write(autoscale_group)
