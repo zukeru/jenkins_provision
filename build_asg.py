@@ -355,7 +355,7 @@ provider = """
 
 text_file = open("Output.tf", "wa")
 text_file.write(provider)
-if security_flag:
+if security_flag == True:
     print 'nada'
 else:
     text_file.write(security_groups)
