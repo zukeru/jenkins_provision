@@ -197,8 +197,11 @@ def build_security_group(security_groups, cluster_name, sg_tag):
             if 'name' in str(group):
                 conn = boto.ec2.connect_to_region('us-west-2',aws_access_key_id=access_key, aws_secret_access_key=secret_key)
                 rs = conn.get_all_security_groups()
+                check_name = sg_tag + cluster_name[:-8]
+                check_name = str(check_name)
                 for item in rs:
-                    if str(sg_tag + cluster_name[:-8]) in item:
+                    item_ret = str(item)
+                    if check_name in item:
                         name = item
                         name2 = item
                     else:
