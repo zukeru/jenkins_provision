@@ -20,6 +20,7 @@ parser.add_argument('--min_size', help='', required=False)
 parser.add_argument('--max_size', help='', required=False)
 parser.add_argument('--asg_name', help='', required=False)
 parser.add_argument('--azs', help='', required=False)
+parser.add_argument('--env', help='', required=False)
 parser.add_argument('--desired_size', help='', required=False)
 parser.add_argument('--force_delete', help='', required=False)
 parser.add_argument('--hc_type', help='', required=False)
@@ -65,7 +66,7 @@ cloud_launch_config = args.cloud_launch_config
 cloud_dev_phase = args.cloud_dev_phase
 cloud_revision = args.cloud_revision
 role = args.role
-
+env_name = args.env
 #asg arguments
 min_size = args.min_size
 max_size = args.max_size
@@ -197,7 +198,8 @@ def build_security_group(security_groups, cluster_name, sg_tag):
             if 'name' in str(group):
                 conn = boto.ec2.connect_to_region('us-west-2',aws_access_key_id=access_key, aws_secret_access_key=secret_key)
                 rs = conn.get_all_security_groups()
-                check_name = sg_tag + cluster_name[:-8]
+                check_name = cluster_name.split('-')
+                check_name = check_name[0]+'-'+check_name[1]+'-'+check_name[2]
                 check_name = str(check_name)
                 for item in rs:
                     item_ret = str(item)
@@ -205,8 +207,8 @@ def build_security_group(security_groups, cluster_name, sg_tag):
                         name = item_ret.replace('SecurityGroup:', '')
                         name2 = item_ret.replace('SecurityGroup:', '')
                     else:
-                        name = sg_tag + cluster_name
-                        name2 = sg_tag + cluster_name
+                        name = cluster_name
+                        name2 = cluster_name
                 security_group_name.append("${aws_security_group.%s.id}" % name)
                 description = group.split(':')[1].split('=')[1]
                 rules = group.split('!')[1]
@@ -272,7 +274,7 @@ def get_a_uuid():
     return r_uuid.replace('=', '')
 
 uuid = str(get_a_uuid())
-asg_name = asg_name + '-' + role + '-' + uuid[:8]
+asg_name = sg_tag + '-' + asg_name + '-' + env_name + '-' + uuid[:8]
 cluster_name = asg_name
 security_groups = security_groups.replace(' ', '')
 security_groups = build_security_group(security_groups, cluster_name, sg_tag)
