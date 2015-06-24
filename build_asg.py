@@ -286,9 +286,9 @@ security_group_name = security_groups[1]
 security_groups = security_groups[0]
 security_flag = security_groups[2]
 
-if security_flag:
+if security_flag == True:
     lc_security_groups = security_group_name[0]
-    lc_security_groups = '["%s",' % lc_security_groups
+    lc_security_groups = '["%s"],' % lc_security_groups
 else:
     lc_security_groups = security_group_name
     
