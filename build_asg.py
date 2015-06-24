@@ -287,9 +287,10 @@ cluster_name = asg_name
 security_groups = security_groups.replace(' ', '')
 security_groups = build_security_group(security_groups, cluster_name, sg_tag)
 security_group_name = security_groups[1]
+export_env_sg_name = security_groups[3]
 security_groups = security_groups[0]
 security_flag = security_groups[2]
-export_env_sg_name = security_groups[3]
+
 
 if security_flag == True:
     lc_security_groups = security_group_name[0]
