@@ -229,7 +229,7 @@ def build_security_group(security_groups, cluster_name, sg_tag):
                 }''' % (name, name2, description, rules)   
             else:
                 break   
-    return_list = (security_group,security_group_name, flag)    
+    return_list = (security_group,security_group_name, flag, name)    
     return return_list 
 
 #Dynamically builds ASG, and won't include values  if they dont exist. Need to do errors when its required.
@@ -289,6 +289,7 @@ security_groups = build_security_group(security_groups, cluster_name, sg_tag)
 security_group_name = security_groups[1]
 security_groups = security_groups[0]
 security_flag = security_groups[2]
+export_env_sg_name = security_groups[3]
 
 if security_flag == True:
     lc_security_groups = security_group_name[0]
@@ -318,7 +319,8 @@ user_data_ins = [('export CLOUD_ENVIRONMENT=%s\n' % cloud_environment),
                  ('export EC2_REGION=%s\n' % provider_region),
                  ('export CLOUD_DEV_PHASE=%s\n'% cloud_dev_phase),
                  ('export CLOUD_REVISION=%s\n'% cloud_revision),
-                 ('export CLOUD_DOMAIN=%s\n'% cloud_domain),]
+                 ('export CLOUD_DOMAIN=%s\n'% cloud_domain),
+                 ('export SG_GROUP=%s\n' % export_env_sg_name)]
 
 for var in in_user_data.split('|'):
     user_data_ins.append(var + '\n')
