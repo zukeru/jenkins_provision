@@ -202,18 +202,21 @@ def build_security_group(security_groups, cluster_name, sg_tag):
                 check_name = cluster_name.split('-')
                 check_name = check_name[0]+'-'+check_name[1]+'-'+check_name[2]
                 check_name = str(check_name)
-                for item in rs:
+                sg_length = len(rs)
+                for index, item in enumerate(rs):
                     item_ret = str(item)
                     if check_name in item_ret:
                         name = item_ret.replace('SecurityGroup:', '')
                         name2 = item_ret.replace('SecurityGroup:', '')
                         security_group_name.append(str(item.id))
                         flag = True
+                        break
                     else:
-                        name = cluster_name
-                        name2 = cluster_name
-                        security_group_name.append("${aws_security_group.%s.id}" % name)
-                        
+                        if not security_group_name and index == (sg_length - 1):
+                            name = cluster_name
+                            name2 = cluster_name
+                            security_group_name.append("${aws_security_group.%s.id}" % name)
+                            break 
                 description = group.split(':')[1].split('=')[1]
                 rules = group.split('!')[1]
                 rules = build_rules(rules)
