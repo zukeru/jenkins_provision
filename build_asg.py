@@ -55,8 +55,6 @@ secret_key = args.secret_key
 access_key = args.access_key
 provider_region = args.provider_region
 security_groups = args.security_groups
-
-
 cloud_stack = args.cloud_stack 
 cloud_environment = args.cloud_environment
 cloud_domain = args.cloud_domain
@@ -197,8 +195,15 @@ def build_security_group(security_groups, cluster_name, sg_tag):
     for group in security_groups.split(','):
         if len(group) > 6:
             if 'name' in str(group):
-                name = sg_tag + cluster_name
-                name2 = sg_tag + cluster_name
+                conn = boto.ec2.connect_to_region('us-west-2',aws_access_key_id=access_key, aws_secret_access_key=secret_key)
+                rs = conn.get_all_security_groups()
+                for item in rs:
+                    if str(sg_tag + cluster_name[:-8]) in item:
+                        name = item
+                        name2 = item
+                    else:
+                        name = sg_tag + cluster_name
+                        name2 = sg_tag + cluster_name
                 security_group_name.append("${aws_security_group.%s.id}" % name)
                 description = group.split(':')[1].split('=')[1]
                 rules = group.split('!')[1]
@@ -324,8 +329,6 @@ autoscale_group = build_asg(built_tags = built_tags if built_tags else None,
                               vpc_zone_identifier = vpc_zone_ident if vpc_zone_ident else None
                               )   
 
-
-#always
 provider = """
         provider "aws" {
             access_key = "%s"
