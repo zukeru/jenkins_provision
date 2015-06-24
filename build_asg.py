@@ -201,9 +201,9 @@ def build_security_group(security_groups, cluster_name, sg_tag):
                 check_name = str(check_name)
                 for item in rs:
                     item_ret = str(item)
-                    if check_name in item:
-                        name = item
-                        name2 = item
+                    if check_name in item_ret:
+                        name = item_ret.replace('SecurityGroup:', '')
+                        name2 = item_ret.replace('SecurityGroup:', '')
                     else:
                         name = sg_tag + cluster_name
                         name2 = sg_tag + cluster_name
@@ -272,7 +272,7 @@ def get_a_uuid():
     return r_uuid.replace('=', '')
 
 uuid = str(get_a_uuid())
-asg_name = asg_name + '-' + uuid[:8] + '-' + role
+asg_name = asg_name + '-' + role + '-' + uuid[:8]
 cluster_name = asg_name
 security_groups = security_groups.replace(' ', '')
 security_groups = build_security_group(security_groups, cluster_name, sg_tag)
