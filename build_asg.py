@@ -230,7 +230,7 @@ def build_security_group(security_groups,vpc_id, cluster_name, sg_tag):
                         vpc_id = "%s"
                         description = "%s"
                         %s
-                    }''' % (name, vpc_id, name2, description, rules) 
+                    }''' % (name, name2,vpc_id, description, rules) 
                 else:
                     security_group = security_group + '''
                     resource "aws_security_group" "%s" {
