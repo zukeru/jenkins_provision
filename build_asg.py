@@ -48,12 +48,14 @@ parser.add_argument('--cloud_revision', help='', required=False)
 parser.add_argument('--role', help='', required=False)
 parser.add_argument('--security_groups', help='', required=False)
 parser.add_argument('--sg_tag', help='', required=False)
+parser.add_argument('--vpc_id', help='', required=False)
 args = parser.parse_args()
 #secret_key = os.environ.get('AWS_SECRET_KEY')
 #access_key = os.environ.get('AWS_ACCESS_KEY')
 sg_tag = args.sg_tag
 secret_key = args.secret_key
 access_key = args.access_key
+vpc_id = args.vpc_id
 provider_region = args.provider_region
 security_groups = args.security_groups
 cloud_stack = args.cloud_stack 
@@ -191,7 +193,7 @@ def build_rules(rules):
                                rule.split('=')[1].split(';')[3].split('|')[1])
     return build_string
 
-def build_security_group(security_groups, cluster_name, sg_tag):
+def build_security_group(security_groups,vpc_id, cluster_name, sg_tag):
     security_group = ''
     flag = False
     for group in security_groups.split(','):
@@ -221,12 +223,21 @@ def build_security_group(security_groups, cluster_name, sg_tag):
                 description = group.split(':')[1].split('=')[1]
                 rules = group.split('!')[1]
                 rules = build_rules(rules)
-                security_group = security_group + '''
-                resource "aws_security_group" "%s" {
-                    name = "%s"
-                    description = "%s"
-                    %s
-                }''' % (name, name2, description, rules)   
+                if vpc_id != '0':
+                    security_group = security_group + '''
+                    resource "aws_security_group" "%s" {
+                        name = "%s"
+                        vpc_id = "%s"
+                        description = "%s"
+                        %s
+                    }''' % (name, vpc_id, name2, description, rules) 
+                else:
+                    security_group = security_group + '''
+                    resource "aws_security_group" "%s" {
+                        name = "%s"
+                        description = "%s"
+                        %s
+                    }''' % (name, name2, description, rules)   
             else:
                 break   
     return_list = (security_group,security_group_name, flag, name)    
@@ -285,7 +296,7 @@ uuid = str(get_a_uuid())
 asg_name = sg_tag + '-' + asg_name + '-' + env_name + '-' + role + '-' + uuid[:8]
 cluster_name = asg_name
 security_groups = security_groups.replace(' ', '')
-security_groups = build_security_group(security_groups, cluster_name, sg_tag)
+security_groups = build_security_group(security_groups,vpc_id, cluster_name, sg_tag)
 security_group_name = security_groups[1]
 export_env_sg_name = security_groups[3]
 security_groups = security_groups[0]
@@ -310,7 +321,8 @@ else:
     built_tags = constant_tag
 
     
-user_data_ins = [('export CLOUD_ENVIRONMENT=%s\n' % cloud_environment),
+user_data_ins = [('#!/bin/bash -i'),
+                 ('export CLOUD_ENVIRONMENT=%s\n' % cloud_environment),
                  ('export CLOUD_MONITOR_BUCKET=%s\n' % cluster_monitor_bucket),
                  ('export CLOUD_APP=%s\n' % cluster_name),
                  ('export CLOUD_STACK=%s\n' % cloud_stack),
@@ -362,10 +374,12 @@ provider = """
 
 text_file = open("Output.tf", "wa")
 text_file.write(provider)
+
 if security_flag == True:
     print 'nada'
 else:
     text_file.write(security_groups)
+    
 text_file.write(launch_configuration)
 text_file.write(autoscale_group)
 text_file.close()
