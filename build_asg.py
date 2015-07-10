@@ -105,7 +105,7 @@ def build_lc(lc_name, lc_name2, lc_image_id, lc_instance_type, lc_public_ip, lc_
     if lc_instance_type:
         launch_config_dict['instance_type'] = lc_instance_type
     if lc_public_ip:
-        launch_config_dict['associate_public_ip_address'] = lc_public_ip
+        launch_config_dict['associate_public_ip_address'] = 'True'
     if lc_security_groups:
         launch_config_dict['security_groups'] = str(lc_security_groups).replace("'",'"')
     if lc_iam_instance_profile:
@@ -116,7 +116,8 @@ def build_lc(lc_name, lc_name2, lc_image_id, lc_instance_type, lc_public_ip, lc_
         launch_config_dict['key_name'] = lc_key_name
     if block_device_mapping:
         launch_config_dict['block_device'] = block_device_mapping
-
+    
+    
     lc_string = '\nresource "aws_launch_configuration" "%s" {\n' % launch_config_dict['lcname']
 
     for key, value in launch_config_dict.iteritems():
