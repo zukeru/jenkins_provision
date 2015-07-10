@@ -104,8 +104,8 @@ def build_lc(lc_name, lc_name2, lc_image_id, lc_instance_type, lc_public_ip, lc_
         launch_config_dict['image_id'] = lc_image_id
     if lc_instance_type:
         launch_config_dict['instance_type'] = lc_instance_type
-    if lc_public_ip:
-        launch_config_dict['associate_public_ip_address'] = 'True'
+
+    launch_config_dict['associate_public_ip_address'] = 'True'
     if lc_security_groups:
         launch_config_dict['security_groups'] = str(lc_security_groups).replace("'",'"')
     if lc_iam_instance_profile:
