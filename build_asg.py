@@ -106,6 +106,7 @@ def build_lc(lc_name, lc_name2, lc_image_id, lc_instance_type, lc_public_ip, lc_
         launch_config_dict['instance_type'] = lc_instance_type
 
     launch_config_dict['associate_public_ip_address'] = 'True'
+    
     if lc_security_groups:
         launch_config_dict['security_groups'] = str(lc_security_groups).replace("'",'"')
     if lc_iam_instance_profile:
@@ -322,7 +323,7 @@ else:
     built_tags = constant_tag
 
     
-user_data_ins = [('#!/bin/bash -i'),
+user_data_ins = [('#!/bin/bash -i \n'),
                  ('export CLOUD_ENVIRONMENT=%s\n' % cloud_environment),
                  ('export CLOUD_MONITOR_BUCKET=%s\n' % cluster_monitor_bucket),
                  ('export CLOUD_APP=%s\n' % cluster_name),
