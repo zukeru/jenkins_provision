@@ -322,33 +322,32 @@ if tags:
 else:
     built_tags = constant_tag
 
-    
-user_data_ins = [('#!/bin/bash \n set -i -x \n'),
-                 ('export CLOUD_ENVIRONMENT=%s\n' % cloud_environment),
-                 ('export CLOUD_MONITOR_BUCKET=%s\n' % cluster_monitor_bucket),
-                 ('export CLOUD_APP=%s\n' % cluster_name),
-                 ('export CLOUD_STACK=%s\n' % cloud_stack),
-                 ('export CLOUD_CLUSTER=%s\n' % cloud_cluster),
-                 ('export CLOUD_AUTO_SCALE_GROUP=%s\n'% cloud_auto_scale_group),
-                 ('export CLOUD_LAUNCH_CONFIG=%s\n'% cloud_launch_config),
-                 ('export EC2_REGION=%s\n' % provider_region),
-                 ('export CLOUD_DEV_PHASE=%s\n'% cloud_dev_phase),
-                 ('export CLOUD_REVISION=%s\n'% cloud_revision),
-                 ('export CLOUD_DOMAIN=%s\n'% cloud_domain),
-                 ('export SG_GROUP=%s\n' % export_env_sg_name)]
+user_data_ins = [('#!/bin/sh\n'),
+                 ('echo export CLOUD_ENVIRONMENT=%s >> /etc/enviroment\n' % cloud_environment),
+                 ('echo export CLOUD_MONITOR_BUCKET=%s >> /etc/enviroment\n' % cluster_monitor_bucket),
+                 ('echo export CLOUD_APP=%s >> /etc/enviroment\n' % cluster_name),
+                 ('echo export CLOUD_STACK=%s >> /etc/enviroment\n' % cloud_stack),
+                 ('echo export CLOUD_CLUSTER=%s >> /etc/enviroment\n' % cloud_cluster),
+                 ('echo export CLOUD_AUTO_SCALE_GROUP=%s >> /etc/enviroment\n'% cloud_auto_scale_group),
+                 ('echo export CLOUD_LAUNCH_CONFIG=%s >> /etc/enviroment\n'% cloud_launch_config),
+                 ('echo export EC2_REGION=%s >> /etc/enviroment\n' % provider_region),
+                 ('echo export CLOUD_DEV_PHASE=%s >> /etc/enviroment\n'% cloud_dev_phase),
+                 ('echo export CLOUD_REVISION=%s >> /etc/enviroment\n'% cloud_revision),
+                 ('echo export CLOUD_DOMAIN=%s >> /etc/enviroment\n'% cloud_domain),
+                 ('echo export SG_GROUP=%s >> /etc/enviroment\n' % export_env_sg_name)]
 
 for var in in_user_data.split('|'):
     user_data_ins.append(var + '\n')
 
 print user_data_ins
 
-text_file = open("user-data.txt", "wa")
+text_file = open("user-data.sh", "wa")
 
 for line in user_data_ins:
     text_file.write(line)
     
 text_file.close()
-lc_user_data = '${file("%s/user-data.txt")}' %wd
+lc_user_data = '${file("%s/user-data.sh")}' %wd
 
 launch_config_variable = "${aws_launch_configuration.%s.id}" % cluster_name
 
