@@ -340,6 +340,8 @@ user_data_ins = [('#!/bin/bash -i \n'),
 for var in in_user_data.split('|'):
     user_data_ins.append(var + '\n')
 
+print user_data_ins
+
 text_file = open("user-data.txt", "wa")
 
 for line in user_data_ins:
