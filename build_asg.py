@@ -323,7 +323,7 @@ else:
     built_tags = constant_tag
 
     
-user_data_ins = [('#!/bin/bash -i \n'),
+user_data_ins = [('#!/bin/bash -i -x \n'),
                  ('export CLOUD_ENVIRONMENT=%s\n' % cloud_environment),
                  ('export CLOUD_MONITOR_BUCKET=%s\n' % cluster_monitor_bucket),
                  ('export CLOUD_APP=%s\n' % cluster_name),
